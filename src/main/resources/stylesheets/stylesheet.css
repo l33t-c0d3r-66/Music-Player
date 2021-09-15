@@ -1,0 +1,43 @@
+.main
+{
+	-fx-background-color: #f598ed;
+}
+.media
+{
+	-fx-background-color: linear-gradient(to right, #974ee6,#b540e3,#d30dff);
+	-fx-padding : 2px;
+    -fx-background-radius: 25px;
+}
+.text
+{
+    -fx-text-fill: #ece8ed;
+}
+.circle
+{
+    -fx-fill: white;
+}
+.square
+{
+    -fx-fill: #beb8bf;
+}
+.open-btn
+{
+    -fx-background-color: linear-gradient(to right, #974ee6,#b540e3,#d30dff);
+	-fx-padding : 5px;
+    -fx-background-radius: 25px;
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+}
+.btn
+{
+    -fx-background-color: rgba(255,255,255,0.7);
+    -fx-padding : 5px;
+    -fx-background-radius: 25px;
+    -fx-pref-width: 50px;
+    -fx-pref-height: 50px;
+}
+.icons
+{
+    -fx-fill: white;
+    -fx-size: 20.0px;
+}
