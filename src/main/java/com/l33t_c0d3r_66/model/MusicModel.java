@@ -17,8 +17,8 @@ public class MusicModel
     private StringProperty pathToImage = new SimpleStringProperty("");
     private StringProperty singerName = new SimpleStringProperty("");
     private StringProperty songName = new SimpleStringProperty("");
-    private StringProperty startTime = new SimpleStringProperty("0:00");
-    private StringProperty endTime = new SimpleStringProperty("0:00");
+    private StringProperty startTime = new SimpleStringProperty("--:--");
+    private StringProperty endTime = new SimpleStringProperty("--:--");
     private StringProperty pathToMusic = new SimpleStringProperty("");
     private ObjectProperty<Image> imageIcon = new SimpleObjectProperty<>();
 

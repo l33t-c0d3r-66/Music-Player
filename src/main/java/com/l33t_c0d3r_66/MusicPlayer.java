@@ -29,7 +29,7 @@ public class MusicPlayer extends Application
         primaryStage.setMinWidth(650);
         primaryStage.setMinHeight(450);
         primaryStage.setMaxHeight(500);
-        primaryStage.setMaxWidth(750);
+        primaryStage.setMaxWidth(700);
     }
 
     public static void main(String args[])

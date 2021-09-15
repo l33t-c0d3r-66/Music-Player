@@ -22,26 +22,32 @@
          <children>
             <VBox layoutX="250.0" layoutY="3.0">
                <children>
-                  <Label fx:id="singerName" text="Singer" textFill="WHITE">
+                  <Label fx:id="singerName" maxHeight="-Infinity" maxWidth="-Infinity" text="Singer" textFill="WHITE" VBox.vgrow="NEVER">
                      <font>
                         <Font name="Times New Roman Bold" size="24.0" />
                      </font>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
                   </Label>
-                  <Label fx:id="songName" styleClass="text" text="Song Name">
+                  <Label fx:id="songName" maxHeight="-Infinity" maxWidth="-Infinity" scaleShape="false" styleClass="text" text="Song Name" VBox.vgrow="NEVER">
                      <font>
                         <Font name="Times New Roman Bold" size="17.0" />
                      </font>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
                   </Label>
                </children>
             </VBox>
             <HBox layoutX="250.0" layoutY="65.0" spacing="170.0">
                <children>
-                  <Label fx:id="startTime" styleClass="text" text="00:00">
+                  <Label fx:id="startTime" styleClass="text" text="--:--">
                      <font>
                         <Font name="Times New Roman Bold" size="14.0" />
                      </font>
                   </Label>
-                  <Label fx:id="endTime" alignment="CENTER_RIGHT" contentDisplay="CENTER" styleClass="text" text="00:00">
+                  <Label fx:id="endTime" alignment="CENTER_RIGHT" contentDisplay="CENTER" styleClass="text" text="--:--">
                      <font>
                         <Font name="Times New Roman Bold" size="14.0" />
                      </font>
@@ -50,7 +56,7 @@
             </HBox>
             <HBox layoutX="244.0" layoutY="85.0">
                <children>
-                  <Slider prefHeight="14.0" prefWidth="243.0" HBox.hgrow="SOMETIMES">
+                  <Slider fx:id="durationSlider" prefHeight="14.0" prefWidth="243.0" HBox.hgrow="SOMETIMES">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
@@ -114,7 +120,7 @@
                   </JFXButton>
                   <JFXButton fx:id="playBtn" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#playBtnOnClick" styleClass="btn" text=" ">
                      <graphic>
-                        <FontAwesomeIconView glyphName="PLAY" size="25" styleClass="icons" />
+                        <FontAwesomeIconView fx:id="playIcon" glyphName="PLAY" size="25" styleClass="icons" />
                      </graphic>
                   </JFXButton>
                   <JFXButton fx:id="forwardBtn" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#forwardBtnOnClick" styleClass="btn" text=" " HBox.hgrow="SOMETIMES">
