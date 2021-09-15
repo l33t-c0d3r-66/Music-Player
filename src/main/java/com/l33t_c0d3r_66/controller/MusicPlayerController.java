@@ -6,6 +6,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.image.ImageView;
@@ -13,6 +14,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.File;
 
@@ -40,6 +42,8 @@ public class MusicPlayerController extends AbstractController<MusicModel>
     private int songNumber = 0;
     private boolean isPlaying = false;
     private boolean isStarted = false;
+    private Duration stopDuration;
+    private double increment;
 
     public MusicPlayerController(MusicModel model)
     {
@@ -68,79 +72,97 @@ public class MusicPlayerController extends AbstractController<MusicModel>
     @FXML
     public void backBtnOnClick()
     {
-        if(songNumber - 1 > 0)
+        if (files.size() > 0)
         {
-            songNumber--;
-            mediaPlayer.stop();
+            if (songNumber - 1 > 0)
+            {
+                songNumber--;
+                mediaPlayer.stop();
+            }
+            else
+            {
+                songNumber = files.size()-1;
+                mediaPlayer.stop();
+            }
+            isStarted = false;
+            media = new Media(files.get(songNumber).toURI().toString());
+            mediaPlayer = new MediaPlayer(media);
+            songName.setText(files.get(songNumber).getName().substring(0, 10) + "...");
+            startTime.setText("00:00");
+            playBtnOnClick();
         }
-        else
-        {
-            songNumber = files.size()-1;
-            mediaPlayer.stop();
-        }
-        media = new Media(files.get(songNumber).toURI().toString());
-        mediaPlayer = new MediaPlayer(media);
-        songName.setText(files.get(songNumber).getName().substring(0, 10) + "...");
-        playBtnOnClick();
     }
 
     @FXML
     public void forwardBtnOnClick()
     {
-        if(songNumber < files.size() - 1)
+        if(files.size() > 0)
         {
-            songNumber++;
-            mediaPlayer.stop();
+            if (songNumber < files.size() - 1)
+            {
+                songNumber++;
+                mediaPlayer.stop();
+            }
+            else
+            {
+                songNumber = 0;
+                mediaPlayer.stop();
+            }
+            isStarted = false;
+            media = new Media(files.get(songNumber).toURI().toString());
+            mediaPlayer = new MediaPlayer(media);
+            songName.setText(files.get(songNumber).getName().substring(0,10) + "...");
+            startTime.setText("00:00");
+            playBtnOnClick();
         }
-        else
-        {
-            songNumber = 0;
-            mediaPlayer.stop();
-        }
-        media = new Media(files.get(songNumber).toURI().toString());
-        mediaPlayer = new MediaPlayer(media);
-        songName.setText(files.get(songNumber).getName().substring(0,10) + "...");
-        playBtnOnClick();
+
     }
 
     @FXML
     public void playBtnOnClick()
     {
-        if(!isStarted)
+        if(files.size() > 0)
         {
-            mediaPlayer.play();
-            playIcon.setIcon(FontAwesomeIcon.PAUSE);
-            isPlaying = true;
-            isStarted = true;
-        }
-        if(isPlaying)
-        {
-            mediaPlayer.pause();
-            playIcon.setIcon(FontAwesomeIcon.PLAY);
+            if(!isStarted)
+            {
+                mediaPlayer.play();
+                playIcon.setIcon(FontAwesomeIcon.PAUSE);
+                isPlaying = true;
+                isStarted = true;
+                endTimeLabel();
+                initailizeIncrement();
+            }
+            else if(isPlaying)
+            {
+                stopDuration = mediaPlayer.getCurrentTime();
+                playIcon.setIcon(FontAwesomeIcon.PLAY);
+                mediaPlayer.stop();
+                isPlaying = false;
+            }
+            else
+            {
+                mediaPlayer.setStartTime(stopDuration);
+                playIcon.setIcon(FontAwesomeIcon.PAUSE);
+                mediaPlayer.play();
+                isPlaying = true;
+            }
+            durationSlider.setBlockIncrement(increment);
+            mediaPlayer.currentTimeProperty().addListener((duration, oldTime, newTime) -> {
+                if(startTimeLabel() && isPlaying)
+                    durationSlider.setValue(mediaPlayer.getCurrentTime().toMillis());
+                if(endTime.getText().equalsIgnoreCase("00:00")) {
+                    endTimeLabel();
+                    initailizeIncrement();
+                }
+            });
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Music Error");
+            alert.setHeaderText("Music Directory Missing");
+            alert.setContentText("Please select music directory which have mp3 files");
+            alert.show();
         }
 
-        mediaPlayer.currentTimeProperty().addListener((duration, oldTime, newTime) -> {
-            durationSlider.setValue(newTime.toMillis() / mediaPlayer.getTotalDuration().toMillis() * 100);
-            int hours = (int) mediaPlayer.getCurrentTime().toHours() % 60;
-            int minutes = (int) mediaPlayer.getCurrentTime().toMinutes() % 60;
-            int seconds = (int) mediaPlayer.getCurrentTime().toSeconds() % 60;
-            int endHours = ((int) mediaPlayer.getTotalDuration().toHours() - hours) % 60;
-            int endMinutes = ((int) mediaPlayer.getTotalDuration().toMinutes() - minutes) % 60;
-            int endSeconds = ((int) mediaPlayer.getTotalDuration().toSeconds() - seconds) % 60;
-            if (hours > 0) {
-                startTime.setText((hours < 10 ? "0" + hours : hours) + ":"
-                        + (minutes < 10 ? "0" + minutes : minutes) + ":"
-                        + (seconds < 10 ? "0" + seconds : seconds));
-                endTime.setText((endHours < 10 ? "0" + endHours : endHours) + ":"
-                        + (endMinutes < 10 ? "0" + endMinutes : endMinutes) +":"
-                        + (endSeconds < 10 ? "0" + endSeconds : endSeconds));
-            } else {
-                startTime.setText((minutes < 10 ? "0" + minutes : minutes) + ":"
-                        + (seconds < 10 ? "0" + seconds : seconds));
-                endTime.setText((endMinutes < 10 ? "0" + endMinutes: endMinutes) +":"
-                        + (endSeconds < 10 ? "0" + endSeconds : endSeconds));
-            }
-        });
     }
 
     @FXML
@@ -159,8 +181,49 @@ public class MusicPlayerController extends AbstractController<MusicModel>
                 mediaPlayer = new MediaPlayer(media);
                 songName.setText(files.get(songNumber).getName().substring(0,10)+"...");
                 songName.setWrapText(true);
+                startTime.setText("00:00");
+                endTime.setText("00:00");
             }
         }
+
+    }
+
+    private boolean startTimeLabel()
+    {
+        int hours = (int) mediaPlayer.getCurrentTime().toHours() % 60;
+        int minutes = (int) mediaPlayer.getCurrentTime().toMinutes() % 60;
+        int seconds = (int) mediaPlayer.getCurrentTime().toSeconds() % 60;
+        if(hours > 0 || minutes > 0 || seconds > 0) {
+            if (hours > 0) {
+                startTime.setText((hours < 10 ? "0" + hours : hours) + ":"
+                        + (minutes < 10 ? "0" + minutes : minutes) + ":"
+                        + (seconds < 10 ? "0" + seconds : seconds));
+            } else {
+                startTime.setText((minutes < 10 ? "0" + minutes : minutes) + ":"
+                        + (seconds < 10 ? "0" + seconds : seconds));
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private void endTimeLabel()
+    {
+        int endHours = ((int) mediaPlayer.getTotalDuration().toHours()) % 60;
+        int endMinutes = ((int) mediaPlayer.getTotalDuration().toMinutes()) % 60;
+        int endSeconds = ((int) mediaPlayer.getTotalDuration().toSeconds()) % 60;
+        if(endHours > 0)
+            endTime.setText((endHours < 10 ? "0" + endHours : endHours) + ":"
+                + (endMinutes < 10 ? "0" + endMinutes : endMinutes) +":"
+                + (endSeconds < 10 ? "0" + endSeconds : endSeconds));
+        else
+            endTime.setText((endMinutes < 10 ? "0" + endMinutes: endMinutes) +":"
+                    + (endSeconds < 10 ? "0" + endSeconds : endSeconds));
+    }
+
+    private void initailizeIncrement()
+    {
+        durationSlider.setMax(media.getDuration().toMillis());
 
     }
 }

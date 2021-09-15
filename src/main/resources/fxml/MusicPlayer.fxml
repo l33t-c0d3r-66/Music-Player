@@ -56,7 +56,7 @@
             </HBox>
             <HBox layoutX="244.0" layoutY="85.0">
                <children>
-                  <Slider fx:id="durationSlider" prefHeight="14.0" prefWidth="243.0" HBox.hgrow="SOMETIMES">
+                  <Slider fx:id="durationSlider" blockIncrement="1.0" majorTickUnit="1.0" minorTickCount="1" prefHeight="14.0" prefWidth="243.0" HBox.hgrow="SOMETIMES">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
