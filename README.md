@@ -18,7 +18,7 @@
 <li> Scene Builder allows you to easily layout JavaFX UI controls, charts, shapes, and containers, so that you can quickly prototype user interfaces.
 <li> Explore More: https://docs.gluonhq.com/scenebuilder/  
   
-## Project Inages
+## Project Images
 
 <img src="https://github.com/l33t-c0d3r-66/Music-Player/blob/master/src/main/resources/icons/1.PNG" width=80%>
 
