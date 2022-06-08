@@ -1,5 +1,5 @@
 # Music-Player
-<li> A Simple Music Player Created in JavaFX using JFoenix and FontAwesomeIcon.</li>
+<li> An Attractive Music Player Application for Desktop Created in JavaFX using JFoenix and FontAwesomeIcon.</li>
 <li> This Project is created using IntelliJ Idea and SceneBuilder.</li>
 <li> User can select a directory where music files are placed and It'll play the music from the directory one by one.
  
